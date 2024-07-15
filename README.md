@@ -11,7 +11,7 @@
 
 <div align="center">
   <picture>
-    <img src="./public/assets/logo.webp" alt="Logo">
+    <img src="./public/assets/logo.webp" alt="Logo" width="75" height="auto" />
   </picture>
 </div>
 
