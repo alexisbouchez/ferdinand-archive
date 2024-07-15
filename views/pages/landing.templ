@@ -1,0 +1,42 @@
+package pages
+
+import "ferdinand/views/layouts"
+
+templ LandingPage() {
+    @layouts.MarketingLayout() {
+    <div>
+      <div class="grid md:grid-cols-2 md:space-x-16 lg:flex-row space-y-6 lg:space-y-0 items-center justify-center max-w-7xl mx-auto p-8 min-h-[calc(100vh-150px)]">
+        <div class="w-full flex flex-col">
+            <span class="font-mono font-semibold uppercase text-ferdinand-300">
+                Public Alpha Phase
+            </span>
+          <h1 class="text-gradient text-light-gradient-reverse text-4xl font-medium tracking-tight sm:text-6xl">
+            Send emails <br /> with Ferdinand.
+          </h1>
+          <h2 class="mt-4 text-yellow-50">
+            An open-source email delivery service.
+          </h2>
+          <div class="mt-6 mb-6 md:mb-0 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <a
+              class="primary-btn"
+              href="/auth/sign_up"
+            >
+              <span>Get started</span>
+              <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+            <a
+              class="secondary-btn space-x-2"
+              href="https://github.com/valyentdev/ferdinand.git"
+            >
+              <i class="fab fa-github"></i>
+              <span>GitHub Repository</span>
+            </a>
+          </div>
+        </div>
+        <div class="w-full">
+            <img src="/assets/screenshot.png" alt="Ferdinand Screenshot" />
+        </div>
+      </div>
+    </div>
+    }
+}

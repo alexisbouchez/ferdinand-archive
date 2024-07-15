@@ -1,0 +1,157 @@
+package pages
+
+import (
+	"ferdinand/views/layouts"
+	"ferdinand/views/components"
+)
+
+templ OverviewPage() {
+	@layouts.DashboardLayout(layouts.DashboardLayoutProps{Class: "!p-0"}) {
+		<div class="flex flex-col py-8 px-12">
+			<h2 class="text-3xl text-gradient font-semibold ">Send Your First Email</h2>
+			<h3 class="mt-2 text-zinc-300 text-sm">Follow these steps to send your first email.</h3>
+			<div class="relative py-6 my-6">
+				<div class="absolute top-0 h-[600px] w-[1px] from-zinc-600/10 via-zinc-600/90 to-zinc-600/10 bg-gradient-to-b"></div>
+				@firstStep()
+				@secondStep()
+				@thirdStep()
+			</div>
+		</div>
+	}
+}
+
+templ firstStep() {
+	<script>
+	function copyValueToClipboard(id, value) {
+		navigator.clipboard.writeText(value)
+
+		const icon = document.getElementById(id)
+		icon.classList.add("fa-check")
+		icon.classList.remove("fa-copy")
+
+		setTimeout(() => {
+			const icon = document.getElementById(id)
+			icon.classList.remove("fa-check")
+			icon.classList.add("fa-regular")
+			icon.classList.add("fa-copy")
+		}, 3 * 1000)
+	}
+	</script>
+	<div class="relative pl-6 transition duration-200 ease-in-out">
+		<div class="absolute -left-[9.5px] top-7 z-10 block h-5 w-5 rounded-full">
+			<div class="ml-1 mt-1 h-3 w-3 rounded-full border-2 transition duration-200 ease-in-out border-white bg-primary "></div>
+		</div>
+		<div class="rounded-xl bg-gradient-to-r via-root to-root p-0.5 transition duration-200 ease-in-out">
+			<div class="rounded-[10px] bg-root">
+				<div class="rounded-[10px] bg-gradient-to-r via-green-1 to-green-1 p-6">
+					<div class="flex items-center gap-2">
+						<h3 class="mb-1 text-xl tracking-[-0.16px] text-white font-bold">
+							Add API key
+						</h3>
+					</div>
+					<p class="mb-6 text-sm text-zinc-300 font-normal">
+						API Keys are used to access the Ferdinand mails HTTP API, and SMTP server.
+						You can create and revoke them at any time.
+					</p>
+					@AddApiKeyOnboarding("")
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ AddApiKeyOnboarding(apiKey string) {
+	<form hx-post="/api_keys">
+		if apiKey == "" {
+			@components.Button(components.ButtonProps{
+				Icon: "fa-key",
+				Extra: map[string]any{
+					"@click": "apiKey = 'key'",
+				},
+			}) {
+				Add
+			}
+		} else {
+			// Replace <api_key by the actual value of the apiKey variable
+			<script>
+			const codeSnippets = document.querySelectorAll('#code-snippet')
+			for (const codeSnippet of codeSnippets) {
+				codeSnippet.innerHTML = codeSnippet.innerHTML.replaceAll(
+					'&lt;api_key&gt;', document.getElementById('api-key').value
+				)
+			}
+			</script>
+			<div class="flex">
+				<div class="flex">
+					@components.InputField(components.InputFieldProps{
+						Class:       "!w-full !rounded-r-none !text-zinc-100",
+						DivClass:    "!w-full",
+						SubDivClass: "!mt-0",
+						Id:          "api-key",
+						Readonly:    true,
+						Value:       apiKey,
+					})
+					<button
+						class="bg-zinc-900 hover:opacity-75 transition text-white px-4 text-sm rounded-r border-l-0 border-zinc-300/20 border duration-200 flex items-center justify-center"
+						onClick={ components.CopyValueToClipboard("api-key-icon", apiKey) }
+						type="button"
+					>
+						<i class="fa-regular fa-copy" id={ "api-key-icon" }></i>
+					</button>
+				</div>
+			</div>
+		}
+	</form>
+}
+
+templ secondStep() {
+	<div class="relative pl-6 transition duration-200 ease-in-out">
+		<div class="absolute -left-[9.5px] top-7 z-10 block h-5 w-5 rounded-full">
+			<div class="ml-1 mt-1 h-3 w-3 rounded-full border-2 transition duration-200 ease-in-out border-white bg-primary "></div>
+		</div>
+		<div class="rounded-xl bg-gradient-to-r via-root to-root p-0.5 transition duration-200 ease-in-out">
+			<div class="rounded-[10px] bg-root">
+				<div class="rounded-[10px] bg-gradient-to-r via-green-1 to-green-1 p-6">
+					<div class="flex items-center gap-2">
+						<h3 class="mb-1 text-xl tracking-[-0.16px] text-white font-bold">
+							Configure your domain
+						</h3>
+					</div>
+					<p class="mb-6 text-sm text-zinc-300 font-normal">
+						Configure your domain to send emails.
+					</p>
+					<a
+						class="primary-btn !w-auto flex items-center cursor-pointer"
+						href={ templ.URL("/domains") }
+					>
+						<i class="w-3.5 h-3.5 fa-solid fa-globe mr-2"></i>
+						<span>Configure your domain →</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ thirdStep() {
+	<div class="relative pl-6 transition duration-200 ease-in-out">
+		<div class="absolute -left-[9.5px] top-7 z-10 block h-5 w-5 rounded-full">
+			<div class="ml-1 mt-1 h-3 w-3 rounded-full border-2 transition duration-200 ease-in-out border-white bg-primary "></div>
+		</div>
+		<div class="rounded-xl bg-gradient-to-r via-root to-root p-0.5 transition duration-200 ease-in-out">
+			<div class="rounded-[10px] bg-root">
+				<div class="rounded-[10px] bg-gradient-to-r via-green-1 to-green-1 p-6">
+					<div class="flex items-center gap-2">
+						<h3 class="mb-1 text-xl tracking-[-0.16px] text-white font-bold">
+							Send an Email
+						</h3>
+					</div>
+					<p class="mb-6 text-sm text-zinc-300 font-normal">
+						Send an email to test your configuration.
+					</p>
+					@components.Code()
+				</div>
+			</div>
+		</div>
+	</div>
+}

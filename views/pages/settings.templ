@@ -1,0 +1,93 @@
+package pages
+
+import (
+	"ferdinand/views/layouts"
+	"ferdinand/views/components"
+	"ferdinand/views/util"
+)
+
+templ SettingsPage() {
+	@layouts.DashboardLayout(layouts.DashboardLayoutProps{}) {
+		<h2 class="text-3xl text-gradient font-semibold ">Account Settings</h2>
+		@SettingsForm(nil)
+		@components.Card(components.CardProps{
+			Title:       "Delete Account",
+			Description: "Deleting your account will permanently remove all your data from our servers. This action cannot be undone.",
+		}) {
+			@components.Button(components.ButtonProps{
+				Variant: components.ButtonVariantDanger,
+				OnClick: components.OpenDialog("delete_account"),
+			}) {
+				Delete Account
+			}
+		}
+		@components.Dialog(components.DialogProps{
+			Id:          "delete_account",
+			Title:       "Delete Account",
+			Description: "Are you sure you want to delete your account?",
+		}) {
+			@components.Button(components.ButtonProps{Variant: components.ButtonVariantDanger, UseHxDelete: true}) {
+				Delete Account
+			}
+		}
+	}
+}
+
+templ SettingsForm(errors map[string]string) {
+	<form class="rounded-md border bg-zinc-900 text-white shadow border-zinc-300/20 mt-6" hx-patch hx-swap="outerHTML">
+		<div class="flex flex-col p-6 border-b border-zinc-300/20">
+			<h3 class="font-semibold leading-none tracking-tight text-xl text-white">My Account</h3>
+		</div>
+		<div class="pt-4 pb-2 space-y-4 divide-y divide-zinc-300/20">
+			<div class="space-y-4 px-6">
+				@components.InputField(components.InputFieldProps{
+					Label:       "Email Address",
+					Placeholder: "ferdinand.cheval@exemple.fr",
+					Id:          "email",
+					Type:        "email",
+					Value:       util.RetrieveUser(ctx).Email,
+					Error:       errors["Email"],
+				})
+				@components.InputField(components.InputFieldProps{
+					Label:       "Full Name",
+					Placeholder: "Ferdinand Cheval",
+					Id:          "full_name",
+					Type:        "text",
+					Value:       util.RetrieveUser(ctx).FullName,
+					Error:       errors["FullName"],
+				})
+			</div>
+			<div class="space-y-4 py-4 px-6">
+				@components.InputField(components.InputFieldProps{
+					Label:       "New Password",
+					LabelRight:  optionalLabelRight,
+					Placeholder: "••••••••••••",
+					Id:          "new_password",
+					Type:        "password",
+					Error:       errors["NewPassword"],
+				})
+				@components.InputField(components.InputFieldProps{
+					Label:       "Confirm Password",
+					LabelRight:  optionalLabelRight,
+					Placeholder: "••••••••••••",
+					Id:          "confirm_password",
+					Type:        "password",
+					Error:       errors["ConfirmPassword"],
+				})
+			</div>
+		</div>
+		<div class="flex items-center p-6 border-t border-zinc-300/20 rounded-b-md bg-zinc-900">
+			<div>
+				@components.Button(components.ButtonProps{
+					Variant: components.ButtonVariantPrimary,
+				}) {
+					Save Changes
+				}
+			</div>
+		</div>
+	</form>
+}
+
+templ optionalLabelRight() {
+	<span class="text-zinc-300 text-sm">(optional)</span>
+}

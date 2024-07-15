@@ -1,0 +1,33 @@
+package layouts
+
+import (
+	"ferdinand/views/components"
+	"os"
+)
+
+templ SharedLayout() {
+	<!DOCTYPE html>
+	<html class="bg-zinc-900" lang="en">
+		<head>
+			<title>{ os.Getenv("APP_NAME") }</title>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			// Favicon
+			<link rel="icon" href="/assets/favicon.ico" type="image/x-icon"/>
+			// Styles
+			<link rel="stylesheet" href="/assets/styles.css"/>
+			// Font Awesome
+			<script src="/assets/scripts/fontawesome.js"></script>
+			// HTMX
+			<script defer src="/assets/scripts/htmx.js"></script>
+			// HTMX SSE
+			<script defer src="/assets/scripts/htmx_sse.js"></script>
+			// Alpine.js 
+			<script src="/assets/scripts/alpine.js"></script>
+		</head>
+		<body class="antialiased">
+			@components.Toaster()
+			{ children... }
+		</body>
+	</html>
+}

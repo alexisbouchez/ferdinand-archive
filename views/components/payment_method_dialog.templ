@@ -1,0 +1,18 @@
+package components
+
+templ PaymentMethodDialog() {
+	@Dialog(DialogProps{
+		Open:        true,
+		NoClose:     true,
+		Title:       "Add Payment Method",
+		Description: "In order to use Ferdinand, you need to add a payment method. This will be used to pay for the services you use, on usage basis.",
+	}) {
+		<a
+			class="focus:outline-none primary-btn"
+			href="/billing/payment_method"
+			autofocus
+		>
+			Add Payment Method
+		</a>
+	}
+}

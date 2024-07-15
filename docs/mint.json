@@ -1,0 +1,76 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Ferdinand",
+  "logo": {
+    "dark": "/images/dark-logo.png",
+    "light": "/images/light-logo.png"
+  },
+  "favicon": "/images/favicon.svg",
+  "colors": {
+    "primary": "#ca8a04",
+    "light": "#facc15",
+    "dark": "#ca8a04",
+    "anchors": {
+      "from": "#ca8a04",
+      "to": "#facc15"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Contact",
+      "url": "https://valyent.dev/contact"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://ferdinand.email"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api_reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/WZCXG3SZQt"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/valyentdev/ferdinand.git"
+    },
+    {
+      "name": "X",
+      "icon": "x",
+      "url": "https://x.com/UseFerdinand"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction"]
+    },
+    {
+      "group": "Legal",
+      "pages": [
+        "legal/acceptable-use",
+        "legal/dpa",
+        "legal/privacy-policy",
+        "legal/subprocessors",
+        "legal/terms-of-service"
+      ]
+    },
+    {
+      "group": "Emails API",
+      "pages": ["api_reference/emails/send"]
+    }
+  ],
+  "footerSocials": {
+    "discord": "https://discord.gg/WZCXG3SZQt",
+    "github": "https://github.com/valyentdev/ferdinand.git",
+    "x": "https://x.com/UseFerdinand"
+  }
+}

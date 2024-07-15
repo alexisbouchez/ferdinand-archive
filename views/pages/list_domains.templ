@@ -1,0 +1,137 @@
+package pages
+
+import (
+	"ferdinand/app/models"
+	"ferdinand/views/layouts"
+	"ferdinand/views/components"
+)
+
+templ ListDomainsPage(domains []models.Domain) {
+	@layouts.DashboardLayout(layouts.DashboardLayoutProps{Class: "!p-0"}) {
+		<div class="flex flex-col py-8 px-12">
+			<div class="flex space-x-4 items-center">
+				<h2 class="text-3xl text-gradient font-semibold ">Domains</h2>
+				@components.Button(components.ButtonProps{
+					Icon:    "fa-solid fa-plus",
+					OnClick: components.OpenDialog("add_domain"),
+				}) {
+					Add Domain
+				}
+			</div>
+			<h3 class="mt-2 text-zinc-300 text-sm">Use your own domains to send your emails.</h3>
+			<div class="mt-8 flow-root">
+				<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+					<div class="inline-block min-w-full py-2 align-middle px-4 sm:px-6 lg:px-8">
+						<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg border border-zinc-700">
+							<table class="min-w-full divide-y divide-zinc-700">
+								<thead class="bg-zinc-900">
+									<tr>
+										<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6">
+											Domain
+										</th>
+										<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
+											Status
+										</th>
+										<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+											<span class="sr-only">Edit</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-zinc-700 bg-white/2.5">
+									if len(domains) == 0 {
+										<tr>
+											<td class="py-4 pl-4 pr-3 text-sm font-medium text-zinc-300 sm:pl-6" colspan="5">
+												No domains added yet.
+											</td>
+										</tr>
+									}
+									for _, domain := range(domains) {
+										@domainsTableItem(domain)
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	@addDomainDialog()
+}
+
+templ domainsTableItem(domain models.Domain) {
+	<tr>
+		<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-zinc-300 sm:pl-6 max-w-[100vw]">
+			<a
+				class="underline text-zinc-300 hover:text-zinc-100 transition-colors"
+				href={ templ.URL("/domains/"+domain.ID) }
+			>
+				{ domain.Domain }
+			</a>
+		</td>
+		<td class="whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
+			if domain.DNSVerified {
+				<span class="success-btn !hover:text-emerald-400 !hover:ring-emerald-400/20">
+					Verified
+				</span>
+			} else {
+				<span class="danger-btn hover:!text-red-400 hover:!ring-red-400/20">
+					Not Verified
+				</span>
+			}
+		</td>
+		<td class="absolute flex -mt-2 whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
+			@components.Dropdown(components.DropdownProps{
+				ButtonText: "...",
+				ButtonClass:   "flex items-center gap-x-4 py-3 text-sm leading-6 font-normal text-white hover:opacity-75 transition -mt-1",
+				DropdownClass: "-mt-2 -right-4 top-4 bg-zinc-900 text-white border border-zinc-300/20",
+			}) {
+				@components.DropdownItem(components.DropdownItemProps{
+					Label:   "Delete",
+					Icon:    "fa-solid fa-trash",
+					Variant: "text-red-400",
+					OnClick: components.OpenDialog("delete_mail_domain_" + domain.ID),
+				})
+			}
+			@components.Dialog(components.DialogProps{
+				Id:          "delete_mail_domain_" + domain.ID,
+				Title:       "Delete domain",
+				Description: "Are you sure you want to delete your domain?",
+			}) {
+				@components.Button(components.ButtonProps{
+					Variant:  components.ButtonVariantDanger,
+					HxDelete: "/domains/"+domain.ID,
+				}) {
+					Delete Domain
+				}
+			}
+		</td>
+	</tr>
+}
+
+templ addDomainDialog() {
+	<form hx-post>
+		@components.Dialog(components.DialogProps{
+			Id:    "add_domain",
+			Title: "Add Domain",
+			Class: "!px-0",
+		}) {
+			@components.InputField(components.InputFieldProps{
+				DivClass:    "px-6 pb-4",
+				Label:       "Domain",
+				Id:          "domain",
+				Placeholder: "example.com",
+				Required:    true,
+			})
+			<div class="border-t border-zinc-300/20 pt-4">
+				@components.Button(components.ButtonProps{
+					Class:   "mx-6",
+					Variant: components.ButtonVariantPrimary,
+					Icon:    "fa-solid fa-plus",
+				}) {
+					Add Domain
+				}
+			</div>
+		}
+	</form>
+}

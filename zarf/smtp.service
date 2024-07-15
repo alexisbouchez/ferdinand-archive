@@ -1,0 +1,14 @@
+[Unit]
+Description=Ferdinand's SMTP Server
+
+[Service]
+EnvironmentFile=/var/ferdinand.env
+ExecStart=/usr/local/bin/smtp
+WorkingDirectory=/home/debian
+Restart=always
+RestartSec=10
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

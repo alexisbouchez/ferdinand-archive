@@ -1,0 +1,7 @@
+ferdinand.email {
+    reverse_proxy localhost:3000
+}
+
+www.ferdinand.email {
+    reverse_proxy localhost:3000
+}

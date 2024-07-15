@@ -1,0 +1,74 @@
+package authPages
+
+import (
+	"ferdinand/views/components"
+	"ferdinand/views/layouts"
+	"ferdinand/views/util"
+)
+
+type SignUpInput struct {
+	Email    string
+	Password string
+	FullName string
+}
+
+templ SignUpPage() {
+	@layouts.AuthLayout(signUpPageHeader) {
+		if util.IsFeatureActive(ctx, "github_oauth") {
+			@continueWithGithub()
+		}
+		@SignUpForm(SignUpInput{}, nil)
+	}
+}
+
+templ SignUpForm(input SignUpInput, errors map[string]string) {
+	<form class="space-y-4" hx-post>
+		@components.InputField(components.InputFieldProps{
+			Label:       "Full Name",
+			Type:        "text",
+			Id:          "full_name",
+			Placeholder: "Ferdinand Cheval",
+			Required:    true,
+			Value:       input.FullName,
+			Error:       errors["FullName"],
+		})
+		@components.InputField(components.InputFieldProps{
+			Label:       "Email",
+			Type:        "email",
+			Id:          "email",
+			Placeholder: "ferdinand.cheval@exemple.fr",
+			Required:    true,
+			Value:       input.Email,
+			Error:       errors["Email"],
+		})
+		@components.InputField(components.InputFieldProps{
+			Label:       "Password",
+			Type:        "password",
+			Id:          "password",
+			Placeholder: "••••••••••",
+			Required:    true,
+			Value:       input.Password,
+			Error:       errors["Password"],
+		})
+		<div class="mt-4">
+			@components.Button(components.ButtonProps{
+				Variant: components.ButtonVariantPrimary,
+				Class:   "w-full",
+			}) {
+				Sign Up
+			}
+		</div>
+	</form>
+}
+
+templ signUpPageHeader() {
+	<h2 class="mt-6  text-center text-3xl font-semibold leading-9 tracking-tight text-white">
+		Sign Up
+	</h2>
+	<p class="mt-2 text-center text-sm text-zinc-200">
+		Already Signed Up ?
+		<a class="leading-6 text-ferdinand-300 hover:text-ferdinand-200" href="/auth/sign_in">
+			Sign In
+		</a>
+	</p>
+}

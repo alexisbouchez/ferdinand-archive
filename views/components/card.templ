@@ -1,0 +1,50 @@
+package components
+
+type CardProps struct {
+	Header      templ.Component
+	Title       string
+	TitleIcon   string
+	Description string
+	Class       string
+	DivClass    string
+	SubDivClass string
+	NoContent   bool
+}
+
+templ Card(props CardProps) {
+	<div class={ "rounded-md border bg-zinc-900 text-white shadow border-zinc-300/20 mt-6 " + props.DivClass }>
+		if props.Header != nil || props.Title != "" || props.Description != "" {
+			<div
+				if props.NoContent {
+					class="flex flex-col p-6"
+				} else {
+					class={ "flex flex-col p-6 border-b border-zinc-300/20 " + props.SubDivClass }
+				}
+			>
+				if props.Header != nil {
+					@props.Header
+				}
+				if props.Title != "" {
+					<h3 class="flex items-center font-semibold leading-none tracking-tight text-xl text-white">
+						if props.TitleIcon != "" {
+							<i class={ "!mr-2 !pl-0 !ml-0 w-4 h-4 " + props.TitleIcon }></i>
+						}
+						<span>
+							{ props.Title }
+						</span>
+					</h3>
+				}
+				if props.Description != "" {
+					<p class="text-white text-sm mt-2">
+						{ props.Description }
+					</p>
+				}
+			</div>
+		}
+		if !props.NoContent {
+			<div class={ "p-6 pt-2 mt-4", props.Class }>
+				{ children... }
+			</div>
+		}
+	</div>
+}

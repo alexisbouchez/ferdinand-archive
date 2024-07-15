@@ -1,0 +1,248 @@
+package layouts
+
+import (
+	"ferdinand/app/middleware"
+	"ferdinand/views/components"
+	"ferdinand/views/util"
+)
+
+type DashboardLayoutProps struct {
+	Class string
+}
+
+templ DashboardLayout(props DashboardLayoutProps) {
+	<script>
+	// When there is a slugify tag on an input, it will automatically slugify the value of the input
+	// and set it to the target element.
+	function slugify(event) {
+		if (!event.target) {
+			return
+		}
+
+		event.target.value = event.target.value
+			.toLowerCase()
+			.replaceAll(" ", "-")
+			.replaceAll(/[^a-z0-9-]/g, "")
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		document.querySelectorAll("[slugify]").forEach((element) => {
+			element.addEventListener("input", slugify)
+		})
+	})	
+	</script>
+	@SharedLayout() {
+		<main
+			class="flex min-h-screen flex-col justify-center bg-zinc-900"
+			x-data="{ mobileSidebarOpen: false }"
+		>
+			<div class="hidden lg:fixed lg:inset-y-0 lg:flex lg:flex-col w-72">
+				@sidebar()
+			</div>
+			<template x-if="mobileSidebarOpen">
+				<div
+					class="lg:hidden fixed inset-0 z-40 bg-zinc-900 bg-opacity-90 !h-full"
+				>
+					@sidebar()
+				</div>
+			</template>
+			<div class="lg:pl-72 bg-zinc-900">
+				@dashboardHeader()
+				<main class={ "py-8 px-12 bg-zinc-850 bg-white/2.5 min-h-[calc(100vh-64px)]", props.Class }>
+					if util.ShowPaymentMethodDialog(ctx) {
+						@components.PaymentMethodDialog()
+					}
+					<div>
+						{ children... }
+					</div>
+				</main>
+			</div>
+		</main>
+	}
+}
+
+templ sidebar() {
+	<div class="!h-full flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-300/20 bg-zinc-900">
+		<div class="flex space-x-4 h-16 shrink-0 items-center border-b border-zinc-300/20 px-6">
+			@components.Logo("h-10")
+			<span class="text-xl font-semibold text-white">Ferdinand</span>
+			<span class="text-xs rounded-md bg-zinc-400/10 text-zinc-300 ring-1 ring-inset ring-zinc-400/20 px-2 py-1">Alpha</span>
+		</div>
+		<nav class="flex flex-1 flex-col">
+			<ul role="list" class="flex flex-1 flex-col gap-y-3">
+				<li class="px-6">
+					<ul role="list" class="-mx-2 space-y-2">
+						@sidebarItem(sidebarItemProps{
+							label:      "Overview",
+							icon:       "fa-house",
+							href:       "/overview",
+						})
+						@sidebarItem(sidebarItemProps{
+							label:      "API Keys",
+							icon:       "fa-key",
+							href:       "/api_keys",
+						})
+						@sidebarItem(sidebarItemProps{
+							label:      "Domains",
+							icon:       "fa-globe",
+							href:       "/domains",
+						})
+						if util.IsFeatureActive(ctx, "billing") {
+							@sidebarItem(sidebarItemProps{
+								label: "Billing",
+								icon:  "fa-money-bill",
+								href:  "/billing",
+							})
+						}
+						@sidebarItem(sidebarItemProps{
+							label: "Settings",
+							icon:  "fa-gear",
+							href:  "/settings",
+						})
+					</ul>
+				</li>
+				@accountMenu()
+			</ul>
+		</nav>
+	</div>
+}
+
+type sidebarItemProps struct {
+	label      string
+	href       string
+	icon       string
+	comingSoon bool
+}
+
+templ sidebarItem(props sidebarItemProps) {
+	<li>
+		<a
+			if ctx.Value(middleware.CTX_KEY_URL).(string) == props.href {
+				class="bg-zinc-800 hover:text-white text-white group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6"
+			}
+			else
+			if props.comingSoon {
+				class="text-zinc-300 opacity-50 group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 cursor-not-allowed"
+			} else {
+				class="text-zinc-300 hover:text-white hover:bg-zinc-800 group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6"
+			}
+			if props.comingSoon {
+				aria-disabled="true"
+				disabled
+			} else {
+				href={ templ.URL(props.href) }
+			}
+		>
+			<i class={ "btn-icon fa-solid w-4 h-4 " + props.icon }></i>
+			<span>{ props.label }</span>
+			if props.comingSoon {
+				<span class="text-xs rounded-md bg-zinc-400/10 text-zinc-300 ring-1 ring-inset ring-zinc-400/20 px-2 py-1">Coming Soon</span>
+			}
+		</a>
+	</li>
+}
+
+templ accountMenu() {
+	<li
+		class="border-t border-zinc-300/20 px-6 mt-auto relative"
+		x-data="{
+			open: false,
+			toggle() {
+				if (this.open) {
+					return this.close()
+				}
+
+				this.$refs.button.focus()
+
+				this.open = true
+			},
+			close(focusAfter) {
+				if (! this.open) return
+
+				this.open = false
+
+				focusAfter && focusAfter.focus()
+			}
+		}"
+		x-on:keydown.escape.prevent.stop="close($refs.button)"
+		x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+		x-id="['dropdown-button']"
+	>
+		<button
+			class="flex items-center gap-x-4 py-3 text-sm leading-6 font-normal text-white hover:opacity-75 transition w-full"
+			type="button"
+			x-ref="button"
+			x-on:click="toggle()"
+			:aria-expanded="open"
+			:aria-controls="$id('dropdown-button')"
+			type="button"
+		>
+			<div class="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-800 border-zinc-700 border text-zinc-200">
+				<span class="font-medium">{ util.RetrieveInitials(ctx) }</span>
+			</div>
+			<span aria-hidden="true">{ util.RetrieveUser(ctx).FullName }</span>
+		</button>
+		<!-- Panel -->
+		<div
+			x-ref="panel"
+			x-show="open"
+			x-transition.origin.top.left
+			x-on:click.outside="close($refs.button)"
+			:id="$id('dropdown-button')"
+			style="display: none;"
+			class="absolute bottom-14 right-4 my-2 w-40 rounded-md bg-zinc-900 text-white border border-zinc-300/10 shadow-md"
+		>
+			<div class="px-3 py-2 text-sm font-semibold">My Account</div>
+			<div role="separator" aria-orientation="horizontal" class="h-px bg-zinc-300/10"></div>
+			<div role="group" class="flex flex-col">
+				<a
+					class="px-3 py-2 relative flex cursor-default select-none items-center rounded-sm text-sm outline-none transition-colors focus:bg-zinc-300/10 focus:text-zinc-300-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:opacity-75 transition cursor-pointer"
+					href={ templ.URL("/settings") }
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path></svg>
+					<span>Settings</span>
+				</a>
+				<form method="post" action="/auth/sign_out" class="!mb-0 !w-full">
+					<button
+						class="px-3 py-2 relative flex cursor-default select-none !w-full items-center rounded-sm text-sm outline-none transition-colors focus:bg-zinc-300/10 focus:text-zinc-300-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:opacity-75 transition cursor-pointer"
+						type="submit"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-4 w-4"><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path><path d="M9 12h12l-3 -3"></path><path d="M18 15l3 -3"></path></svg>
+						<span>Sign Out</span>
+					</button>
+				</form>
+			</div>
+		</div>
+	</li>
+}
+
+templ dashboardHeader() {
+	<div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-zinc-300/20 bg-zinc-900 px-4 sm:gap-x-6 sm:px-6 lg:px-12">
+		<button
+			type="button"
+			class="-m-2.5 p-2.5 text-zinc-300 lg:hidden"
+			x-on:click="mobileSidebarOpen = !mobileSidebarOpen"
+		>
+			<i class="fa-solid fa-times w-6 h-6" x-show="mobileSidebarOpen"></i>
+			<svg x-show="!mobileSidebarOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" aria-hidden="true">
+				<path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path>
+			</svg>
+		</button>
+		<div class="flex flex-1 gap-x-4 self-stretch">
+			<div class="ml-auto flex items-center space-x-6">
+				<a
+					href="https://valyent.dev/contact"
+					class="text-zinc-300 hover:text-zinc-50 transition-colors text-sm flex space-x-2 items-center !py-[10px] !py !rounded-md cursor-pointer"
+				>
+					Get in touch
+				</a>
+				<a href="https://docs.ferdinand.email" target="_blank">
+					<button class="secondary-btn text-sm flex space-x-2 items-center !py-[10px] !py !rounded-md cursor-pointer !text-zinc-300">
+						<span>Documentation</span>
+						<i class="fa-solid fa-arrow-up-right-from-square"></i>
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+}

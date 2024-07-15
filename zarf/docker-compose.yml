@@ -1,0 +1,51 @@
+services:
+  postgres:
+    container_name: ferdinand_postgres
+    image: "postgres:13"
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ferdinand
+      POSTGRES_USER: ferdinand
+      POSTGRES_PASSWORD: <replace_by_your_postgres_password>
+      PGPASSWORD: <replace_by_your_postgres_password>
+    ports:
+      - "5432:5432"
+    volumes:
+      - "ferdinand_postgres:/var/lib/postgresql/data"
+    networks:
+      - ferdinand
+
+  web:
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    build:
+      context: ..
+      dockerfile: ./web.Dockerfile
+    env_file:
+      - ../.env
+    networks:
+      - ferdinand
+
+  caddy:
+    image: caddy:2.8.4-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ../zarf/Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    network_mode: "host"
+
+volumes:
+  ferdinand_postgres:
+    name: ferdinand_postgres
+  caddy_data:
+  caddy_config:
+
+networks:
+  ferdinand:

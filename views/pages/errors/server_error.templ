@@ -1,0 +1,17 @@
+package errorPages
+
+import (
+	"ferdinand/views/layouts"
+	"net/http"
+	"strconv"
+)
+
+
+templ ServerErrorPage(errorCode int) {
+	@layouts.SharedLayout() {
+		<div class="text-white container">
+			<h1 class="text-5xl font-bold">{ strconv.Itoa(errorCode) } - { http.StatusText(errorCode) }</h1>
+			<p class="text-xl">Something went wrong on our end. Please try again later.</p>
+		</div>
+	}
+}

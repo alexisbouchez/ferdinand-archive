@@ -1,0 +1,221 @@
+package layouts
+
+import (
+	"ferdinand/views/components"
+	"time"
+	"strconv"
+)
+
+templ MarketingLayout() {
+	@SharedLayout() {
+		@valyentBanner()
+		@marketingHeader()
+		{ children... }
+		@marketingFooter()
+	}
+}
+
+templ marketingHeader() {
+	<header class="border-b border-ferdinand-300/20 bg-zinc-900" x-data="{ mobileSidebarOpen: false }">
+		<nav class="mx-auto flex max-w-7xl items-center justify-between px-8 py-6">
+			<div class="flex lg:flex-1">
+				<a
+					class="-m-1.5 flex items-center space-x-4 p-1.5 text-white transition-opacity hover:opacity-75"
+					href="/"
+				>
+					@components.Logo("h-12 w-auto")
+					<span class="text-xl font-semibold">Ferdinand</span>
+				</a>
+			</div>
+			<div class="flex lg:hidden">
+				<button
+					type="button"
+					class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-zinc-200"
+					x-on:click="mobileSidebarOpen = !mobileSidebarOpen"
+				>
+					<i class="fa-solid fa-times w-6 h-6" x-show="mobileSidebarOpen"></i>
+					<svg x-show="!mobileSidebarOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" aria-hidden="true">
+						<path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path>
+					</svg>
+				</button>
+			</div>
+			<div class="hidden lg:flex lg:gap-x-2">
+				<a
+					href="https://docs.ferdinand.email"
+					class="mr-8 flex items-center space-x-2 text-sm font-medium leading-6 text-zinc-200 transition-opacity hover:opacity-75"
+				>
+					<span>Documentation</span>
+					<i class="fa-solid fa-arrow-up-right-from-square h-3 w-3"></i>
+				</a>
+				<a
+					href="/pricing"
+					class="mr-8 flex items-center space-x-2 text-sm font-medium leading-6 text-zinc-200 transition-opacity hover:opacity-75"
+				>
+					<span>Pricing</span>
+				</a>
+			</div>
+			<div class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-4">
+				<a
+					class="secondary-btn"
+					href="/auth/sign_in"
+				>
+					Sign In
+				</a>
+				<a
+					class="primary-btn"
+					href="/auth/sign_up"
+				>
+					<span>Sign Up</span>
+					<i class="fa-solid fa-arrow-right ml-2"></i>
+				</a>
+			</div>
+		</nav>
+		<div class="lg:hidden" x-show="mobileSidebarOpen" x-transition>
+			<div class="space-y-4 px-8 py-6">
+				<a 
+					href="https://docs.ferdinand.email"
+					class="block text-sm font-medium leading-6 text-zinc-300 hover:text-white"
+				>
+					<span>Documentation</span>
+					<i class="fa-solid fa-arrow-up-right-from-square h-3 w-3"></i>
+				</a>
+				<a 
+					href="/pricing"
+					class="block text-sm font-medium leading-6 text-zinc-300 hover:text-white"
+				>
+					<span>Pricing</span>
+				</a>
+				<div>
+				<a class="secondary-btn" href="/auth/sign_in">
+					Sign In
+				</a>
+				</div>
+				<div>
+					<a class="primary-btn" href="/auth/sign_up">
+						<span>Sign Up</span>
+						<i class="fa-solid fa-arrow-right ml-2"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</header>
+}
+
+templ marketingFooter() {
+	<footer class="border-t border-ferdinand-300/20 bg-zinc-900 pt-12 shadow-lg">
+		<div class="mx-auto max-w-7xl px-6 pb-8 lg:px-8">
+			<div class="flex flex-col md:flex-row gap-y-8 md:gap-x-16">
+				<div class="space-y-8">
+					<a
+						class="-m-1.5 flex items-center space-x-4 p-1.5 text-white transition-opacity hover:opacity-75"
+						href="/"
+					>
+						@components.Logo("h-12 w-auto")
+						<span class="text-xl font-semibold">Ferdinand</span>
+					</a>
+					<p class="text-sm leading-6 text-zinc-300">
+						Send emails with Ferdinand.
+					</p>
+					<div class="flex items-center space-x-6">
+						<a
+							href="https://github.com/valyentdev/ferdinand.git"
+							class="text-zinc-400 hover:text-zinc-500"
+						>
+							<span class="sr-only">GitHub</span>
+							<i class="fa-brands fa-github h-6 w-6"></i>
+						</a>
+						<a
+							href="https://x.com/UseFerdinand"
+							class="text-zinc-400 hover:text-zinc-500"
+						>
+							<span class="sr-only">X.com</span>
+							<i class="fa-brands fa-x-twitter h-6 w-6"></i>
+						</a>
+						<a
+							href="https://discord.gg/WnXDrQt9Ba"
+							class="text-zinc-400 hover:text-zinc-500"
+						>
+							<span class="sr-only">Discord</span>
+							<i class="fa-brands fa-discord h-6 w-6"></i>
+						</a>
+					</div>
+				</div>
+				<div class="md:grid md:grid-cols-3 md:gap-16">
+					<div class="mt-10 md:mt-0">
+						<h3 class="text-sm font-bold leading-6 text-zinc-300">
+							Company
+						</h3>
+						<ul class="mt-4 space-y-3">
+							@footerLink("https://valyent.dev", "About")
+							@footerLink("https://valyent.dev/contact", "Contact")
+							@footerLink("https://valyent.substack.com", "Newsletter")
+						</ul>
+					</div>
+					<div class="mt-10 md:mt-0">
+						<h3 class="text-sm font-bold leading-6 text-zinc-300">
+							Product
+						</h3>
+						<ul class="mt-4 space-y-3">
+							@footerLink("https://docs.ferdinand.email", "Documentation")
+							@footerLink("/pricing", "Pricing")
+						</ul>
+					</div>
+					<div class="mt-10 md:mt-0">
+						<h3 class="text-sm font-bold leading-6 text-zinc-300">
+							Legal
+						</h3>
+						<ul role="list" class="mt-4 space-y-3">
+							@footerLink("https://docs.ferdinand.email/legal/acceptable-use", "Acceptable Use")
+							@footerLink("https://docs.ferdinand.email/legal/dpa", "Data Processing Agreement")
+							@footerLink("https://docs.ferdinand.email/legal/privacy-policy", "Privacy Policy")
+							@footerLink("https://docs.ferdinand.email/legal/subprocessors", "Subprocessors")
+							@footerLink("https://docs.ferdinand.email/legal/terms-of-service", "Terms of Service")
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="mt-16 border-t border-ferdinand-50/10 pt-8">
+				<p class="text-xs leading-5 text-zinc-300">
+					© { strconv.Itoa(time.Now().Year()) } Valyent. All rights reserved.
+				</p>
+			</div>
+		</div>
+	</footer>
+}
+
+templ footerLink(href string, text string) {
+	<li>
+		<a
+			href={ templ.URL(href) }
+			class="text-sm leading-6 text-zinc-300 hover:text-white"
+		>
+			{ text }
+		</a>
+	</li>
+}
+
+templ valyentBanner() {
+	<div class="bg-white">
+		<div class="bg-ferdinand-400/20 border-b border-ferdinand-400/20 text-zinc-900">
+			<div class="max-w-7xl mx-auto px-6 py-3 flex items-center space-x-2 text-sm leading-6">
+				<a class="font-bold flex items-center space-x-2 hover:opacity-75 transition" href="https://valyent.dev">
+					@valyentLogo()
+					<span href="https://valyent.dev">Valyent</span>
+				</a>
+				<span class="font-bold">/</span>
+				<span class="font-semibold">Ferdinand</span>
+				<span class="font-bold">⸱</span>
+				<p>
+					Join the <a class="text-ferdinand-700 underline hover:opacity-75 transition" href="/auth/sign_up">alpha version</a> to get early access to our platform.
+				</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ valyentLogo() {
+	<svg class="h-5 w-auto" width="1000" height="1000" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M14.5137 28.9607C7.84887 15.6616 17.5184 0 32.3941 0H136.416C144.082 0 151.073 4.38159 154.415 11.2804L563.44 855.596C566.122 861.135 566.106 867.6 563.396 873.125L518.918 963.789C511.632 978.64 490.493 978.73 483.082 963.941L14.5137 28.9607Z" fill="black"></path>
+		<path d="M332.258 3.25183C317.732 3.32257 308.124 18.3653 314.169 31.5736L616.974 693.303C623.922 708.487 645.318 708.974 652.95 694.122L697.966 606.517C700.748 601.102 700.913 594.715 698.414 589.165L511.886 174.906C505.926 161.67 515.607 146.694 530.122 146.694H749.07C763.51 146.694 773.191 161.529 767.377 174.747L706.17 313.886C703.764 319.358 703.93 325.619 706.625 330.955L752.991 422.768C760.405 437.448 781.382 437.404 788.734 422.694L985.456 29.0997C992.121 15.7638 982.377 0.0858154 967.468 0.158447L332.258 3.25183Z" fill="black"></path>
+	</svg>
+}
