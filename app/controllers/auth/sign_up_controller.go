@@ -40,13 +40,14 @@ func (c *SignUpController) Handle(ctx *caesar.Context) error {
 	}
 
 	user := models.User{Email: data.Email, FullName: data.FullName, Password: data.Password}
-	if err := c.db.Create(user).Error; err != nil {
+	if err := c.db.Create(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrCheckConstraintViolated) {
 			return ctx.Render(authPages.SignUpForm(
 				authPages.SignUpInput{Email: data.Email, FullName: data.FullName, Password: data.Password},
 				map[string]string{"email": "Email is already in use"},
 			))
 		}
+		log.Error("error while inserting user into the database", "err", err)
 	}
 
 	if err := c.auth.Authenticate(ctx, user); err != nil {

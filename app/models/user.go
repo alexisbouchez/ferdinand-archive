@@ -17,8 +17,8 @@ type User struct {
 
 	GitHubUserID string `gorm:"unique"`
 
-	StripeCustomerID                  string `gorm:"unique"`
-	StripePaymentMethodID             string `gorm:"unique"`
+	StripeCustomerID                  string
+	StripePaymentMethodID             string
 	StripePaymentMethodExpirationDate time.Time
 
 	CreatedAt time.Time
