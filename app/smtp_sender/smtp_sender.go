@@ -109,12 +109,12 @@ func deliver(from, to string, msg []byte, mx string, insecure bool, domain strin
 
 	c, err := smtp.NewClient(conn, mx)
 	if err != nil {
-		log.Debugf("Error creating client: %v", err)
+		log.Error("could not create client", "error", err)
 		return newSMTPError(err, false, 111)
 	}
 
 	if err = c.Hello(domain); err != nil {
-		log.Debugf("Error saying hello: %v", err)
+		log.Error("could not say hello", "error", err)
 		return newSMTPError(err, false, 111)
 	}
 
@@ -154,7 +154,6 @@ func deliver(from, to string, msg []byte, mx string, insecure bool, domain strin
 	}
 
 	if err := w.Close(); err != nil {
-		log.Debugf("err: %v\n", err)
 		return newSMTPErrorFromSTMP(err)
 	}
 

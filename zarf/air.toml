@@ -2,8 +2,8 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-  bin = "./tmp/http"
-  cmd="go build -p 4 -ldflags \"-s -w\" -o ./tmp/http ./cmd/http"
+  bin = "./tmp/web"
+  cmd="go build -p 4 -ldflags \"-s -w\" -o ./tmp/web ./cmd/web"
 
   delay = 20
   exclude_dir = ["public/assets", "tmp", "node_modules", "vendor"]

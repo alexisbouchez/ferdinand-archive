@@ -54,7 +54,7 @@ func (mb *MailBuilder) Build() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// signWithDKIM signs the email message with DKIM.
+// SignWithDKIM signs the email message with DKIM.
 func (mb *MailBuilder) SignWithDKIM(msg []byte, domain, privateKey string) ([]byte, error) {
 	// Decode the private key
 	privKeyBytes, err := base64.StdEncoding.DecodeString(privateKey)
