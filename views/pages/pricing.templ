@@ -1,150 +1,147 @@
 package pages
 
 import (
-    "ferdinand/views/layouts"
+	"ferdinand/views/layouts"
 )
 
 templ PricingPage() {
-    @layouts.MarketingLayout() {
-      <div class="flex flex-col items-center justify-center bg-zinc-900 pt-16">
-        <div class="mx-auto w-full max-w-5xl px-6 md:max-w-7xl">
-          <h2 class="text-gradient mb-2 mt-2 text-center text-[3rem] leading-[120%] tracking-tight md:text-[3.5rem]">
-            Pricing
-          </h2>
-          <p class="text-center text-base font-normal text-yellow-50 md:text-[1.125rem] md:leading-[1.5]">
-            Simple and transparent pricing, based on usage.
-          </p>
-        </div>
-      </div>
-
-      <div class="isolate overflow-hidden bg-zinc-900">
-        <div class="mx-auto max-w-7xl px-6 pb-96 text-center lg:px-8">
-          <div class="relative mt-6">
-            @heroPattern()
-          </div>
-        </div>
-        <div class="flow-root bg-white pb-24 sm:pb-32">
-          <div class="-mt-80">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-              <div class="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl">
-                <div class="flex w-full flex-col justify-center md:flex-row md:space-x-24 space-y-8 md:space-y-0">
-                    @selfHostedPricingCard()
-                    @managedPricingCard()
-                </div>
-                <div class="flex flex-col items-start gap-x-8 gap-y-6 rounded-3xl p-8 ring-1 ring-zinc-900/10 sm:gap-y-10 sm:p-10 lg:col-span-2 lg:flex-row lg:items-center">
-                  <div class="lg:min-w-0 lg:flex-1">
-                    <h3 class="text-lg font-semibold leading-8 tracking-tight text-yellow-600">
-                      Custom plan
-                    </h3>
-                    <p class="mt-1 text-base leading-7 text-zinc-600">
-                      Need a custom plan? Contact us and we'll help you find the plan that suits you.
-                    </p>
-                  </div>
-                  <a
-                    class="primary-btn mt-2 inline-flex justify-center gap-1 overflow-hidden rounded-md border border-ferdinand-900/20 !bg-ferdinand-400/30 px-3 py-2 text-sm font-medium !text-ferdinand-900 text-white transition transition-opacity hover:bg-zinc-600 hover:opacity-80"
-                    href="https://valyent.dev/contact"
-                  >
-                    Contact Us
-                    <i class="fa-solid fa-arrow-right ml-2"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
+	@layouts.MarketingLayout() {
+		<div class="flex flex-col items-center justify-center bg-zinc-900 pt-16">
+			<div class="mx-auto w-full max-w-5xl px-6 md:max-w-7xl">
+				<h2 class="text-gradient mb-2 mt-2 text-center text-[3rem] leading-[120%] tracking-tight md:text-[3.5rem]">
+					Pricing
+				</h2>
+				<p class="text-center text-base font-normal text-yellow-50 md:text-[1.125rem] md:leading-[1.5]">
+					Simple and transparent pricing, based on usage.
+				</p>
+			</div>
+		</div>
+		<div class="isolate overflow-hidden bg-zinc-900">
+			<div class="mx-auto max-w-7xl px-6 pb-96 text-center lg:px-8">
+				<div class="relative mt-6">
+					@heroPattern()
+				</div>
+			</div>
+			<div class="flow-root bg-white pb-24 sm:pb-32">
+				<div class="-mt-80">
+					<div class="mx-auto max-w-7xl px-6 lg:px-8">
+						<div class="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl">
+							<div class="flex w-full flex-col justify-center md:flex-row md:space-x-24 space-y-8 md:space-y-0">
+								@selfHostedPricingCard()
+								@managedPricingCard()
+							</div>
+							<div class="flex flex-col items-start gap-x-8 gap-y-6 rounded-3xl p-8 ring-1 ring-zinc-900/10 sm:gap-y-10 sm:p-10 lg:col-span-2 lg:flex-row lg:items-center">
+								<div class="lg:min-w-0 lg:flex-1">
+									<h3 class="text-lg font-semibold leading-8 tracking-tight text-yellow-600">
+										Custom plan
+									</h3>
+									<p class="mt-1 text-base leading-7 text-zinc-600">
+										Need a custom plan? Contact us and we'll help you find the plan that suits you.
+									</p>
+								</div>
+								<a
+									class="primary-btn mt-2 inline-flex justify-center gap-1 overflow-hidden rounded-md border border-ferdinand-900/20 !bg-ferdinand-400/30 px-3 py-2 text-sm font-medium !text-ferdinand-900 text-white transition transition-opacity hover:bg-zinc-600 hover:opacity-80"
+									href="https://valyent.dev/contact"
+								>
+									Contact Us
+									<i class="fa-solid fa-arrow-right ml-2"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 }
 
 templ selfHostedPricingCard() {
-    <div class="w-full rounded-3xl bg-white p-8 shadow-xl ring-1 ring-zinc-900/10 sm:p-10 lg:w-1/2">
-      <div>
-        <span class="text-lg font-semibold leading-7 text-purple-600">
-          Self-Hosted
-        </span>
-        <div class="mt-2 flex items-baseline gap-x-2">
-          <span class="text-5xl font-bold tracking-tight text-zinc-900">
-            Open-Source
-          </span>
-        </div>
-
-        <hr class="mt-6" />
-
-        <div class="space-y-3">
-          <div class="flow-root mt-4">
-            <ul class="-my-2 divide-y border-t text-sm leading-6 lg:border-t-0 divide-white/5 border-white/5 text-black">
-                @pricingPerk("Send emails through our SMTP server.")
-                @pricingPerk("Add domains and manage DNS records (SPF, DKIM, DMARC).")
-                @pricingPerk("Add API keys, scoped to a domain or to your whole account.")
-                @pricingPerk("And more to come.")
-            </ul>
-          </div>
-        </div>
-      </div>
-      <a
-        class="primary-btn !w-full mt-16 inline-flex justify-center gap-1 overflow-hidden rounded-md border border-purple-900/20 !bg-purple-400/30 px-3 py-2 text-sm font-medium !text-purple-900 text-white transition transition-opacity hover:bg-purple-600 hover:opacity-80"
-        href="https://github.com/valyentdev/ferdinand.git"
-      >
-        <i class="fa-brands fa-github h-4 w-4"></i>
-        <span>GitHub</span>
-      </a>
-    </div>
+	<div class="w-full rounded-3xl bg-white p-8 shadow-xl ring-1 ring-zinc-900/10 sm:p-10 lg:w-1/2">
+		<div>
+			<span class="text-lg font-semibold leading-7 text-purple-600">
+				Self-Hosted
+			</span>
+			<div class="mt-2 flex items-baseline gap-x-2">
+				<span class="text-5xl font-bold tracking-tight text-zinc-900">
+					Open-Source
+				</span>
+			</div>
+			<hr class="mt-6"/>
+			<div class="space-y-3">
+				<div class="flow-root mt-4">
+					<ul class="-my-2 divide-y border-t text-sm leading-6 lg:border-t-0 divide-white/5 border-white/5 text-black">
+						@pricingPerk("Send transactional emails through our SMTP server.")
+						@pricingPerk("Add domains and manage DNS records (SPF, DKIM, DMARC).")
+						@pricingPerk("Add API keys, scoped to a domain or to your whole account.")
+						@pricingPerk("And more to come.")
+					</ul>
+				</div>
+			</div>
+		</div>
+		<a
+			class="primary-btn !w-full mt-16 inline-flex justify-center gap-1 overflow-hidden rounded-md border border-purple-900/20 !bg-purple-400/30 px-3 py-2 text-sm font-medium !text-purple-900 text-white transition transition-opacity hover:bg-purple-600 hover:opacity-80"
+			href="https://github.com/valyentdev/ferdinand.git"
+		>
+			<i class="fa-brands fa-github h-4 w-4"></i>
+			<span>GitHub</span>
+		</a>
+	</div>
 }
 
 templ managedPricingCard() {
-  <div class="w-full rounded-3xl bg-white p-8 shadow-xl ring-1 ring-zinc-900/10 sm:p-10 lg:w-1/2">
-    <div>
-      <span class="text-lg font-semibold leading-7 text-ferdinand-600">
-        Managed (free alpha version)
-      </span>
-      <div class="mt-4 flex items-baseline gap-x-2">
-        <span class="text-5xl font-bold tracking-tight text-zinc-900 line-through">$0.10</span>
-        <span class="text-base font-semibold leading-7 text-zinc-600">/1000 emails</span>
-      </div>
-      <hr class="mt-6" />
-      <div class="space-y-3">
-        <div class="flow-root mt-4">
-          <ul class="-my-2 divide-y border-t text-sm leading-6 lg:border-t-0 divide-white/5 border-white/5 text-black">
-            @pricingPerk("Send emails through our SMTP server.")
-            @pricingPerk("Add domains and manage DNS records (SPF, DKIM, DMARC).")
-            @pricingPerk("Add API keys, scoped to a domain or to your whole account.")
-            @pricingPerk("Benefit from our managed infrastructure.")
-            @pricingPerk("And more to come.")
-          </ul>
-        </div>
-      </div>
-    </div>
-    <a class="primary-btn mt-6 !w-full inline-flex justify-center gap-1 overflow-hidden rounded-md border border-ferdinand-900/20 !bg-ferdinand-400/30 px-3 py-2 text-sm font-medium !text-ferdinand-900 text-white transition transition-opacity hover:bg-zinc-600 hover:opacity-80" href="/auth/sign_up">
-      <span>Get started</span>
-      <i class="fa-solid fa-arrow-right ml-2"></i>
-    </a>
-  </div>
+	<div class="w-full rounded-3xl bg-white p-8 shadow-xl ring-1 ring-zinc-900/10 sm:p-10 lg:w-1/2">
+		<div>
+			<span class="text-lg font-semibold leading-7 text-ferdinand-600">
+				Managed (free alpha version)
+			</span>
+			<div class="mt-4 flex items-baseline gap-x-2">
+				<span class="text-5xl font-bold tracking-tight text-zinc-900 line-through">$0.10</span>
+				<span class="text-base font-semibold leading-7 text-zinc-600">/1000 emails</span>
+			</div>
+			<hr class="mt-6"/>
+			<div class="space-y-3">
+				<div class="flow-root mt-4">
+					<ul class="-my-2 divide-y border-t text-sm leading-6 lg:border-t-0 divide-white/5 border-white/5 text-black">
+						@pricingPerk("Send transactional emails through our SMTP server.")
+						@pricingPerk("Add domains and manage DNS records (SPF, DKIM, DMARC).")
+						@pricingPerk("Add API keys, scoped to a domain or to your whole account.")
+						@pricingPerk("Benefit from our managed infrastructure.")
+						@pricingPerk("And more to come.")
+					</ul>
+				</div>
+			</div>
+		</div>
+		<a class="primary-btn mt-6 !w-full inline-flex justify-center gap-1 overflow-hidden rounded-md border border-ferdinand-900/20 !bg-ferdinand-400/30 px-3 py-2 text-sm font-medium !text-ferdinand-900 text-white transition transition-opacity hover:bg-zinc-600 hover:opacity-80" href="/auth/sign_up">
+			<span>Get started</span>
+			<i class="fa-solid fa-arrow-right ml-2"></i>
+		</a>
+	</div>
 }
 
 templ pricingPerk(perk string) {
-  <li class="flex items-center gap-x-3 py-1">
-    <i class="fa-solid fa-check h-4 w-4 text-ferdinand-600 font-medium"></i>
-    <span class="text-zinc-900">{perk}</span>
-  </li>
+	<li class="flex items-center gap-x-3 py-1">
+		<i class="fa-solid fa-check h-4 w-4 text-ferdinand-600 font-medium"></i>
+		<span class="text-zinc-900">{ perk }</span>
+	</li>
 }
 
 templ heroPattern() {
-  <svg
-    viewBox="0 0 1208 1024"
-    class="absolute -top-10 left-1/2 -z-10 h-[64rem] -translate-x-1/2 opacity-75 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"
-  >
-    <ellipse
-      cx="604"
-      cy="512"
-      fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)"
-      rx="604"
-      ry="512"
-    />
-    <defs>
-      <radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
-        <stop stop-color="#f5eedf" />
-        <stop offset="1" stop-color="#dcbf95" />
-      </radialGradient>
-    </defs>
-  </svg>
+	<svg
+		viewBox="0 0 1208 1024"
+		class="absolute -top-10 left-1/2 -z-10 h-[64rem] -translate-x-1/2 opacity-75 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"
+	>
+		<ellipse
+			cx="604"
+			cy="512"
+			fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)"
+			rx="604"
+			ry="512"
+		></ellipse>
+		<defs>
+			<radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
+				<stop stop-color="#f5eedf"></stop>
+				<stop offset="1" stop-color="#dcbf95"></stop>
+			</radialGradient>
+		</defs>
+	</svg>
 }
