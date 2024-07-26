@@ -6,6 +6,7 @@ import (
 	"ferdinand/app/models"
 	smtpSender "ferdinand/app/smtp_sender"
 	"ferdinand/util"
+	"fmt"
 	"io"
 	"net/mail"
 	"os"
@@ -28,6 +29,7 @@ func New(db *gorm.DB) *Backend {
 
 // NewSession is called after client greeting (EHLO, HELO).
 func (bkd *Backend) NewSession(c *smtp.Conn) (smtp.Session, error) {
+	fmt.Println("New session", c.Hostname())
 	return &Session{
 		db: bkd.db,
 	}, nil

@@ -15,7 +15,7 @@ type User struct {
 
 	Password string
 
-	GitHubUserID string `gorm:"unique"`
+	GitHubUserID string
 
 	StripeCustomerID                  string
 	StripePaymentMethodID             string

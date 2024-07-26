@@ -27,19 +27,25 @@ func (c *GitHubOAuthController) Callback(ctx *caesar.Context) error {
 		return err
 	}
 
-	// Find or create user
-	user := models.User{GitHubUserID: oauthUser.UserID, Email: oauthUser.Email, FullName: oauthUser.Name}
-	if err := c.db.First(&user).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			if err := c.db.Create(&user).Error; err != nil {
-				return err
-			}
-		} else {
+	// Find user
+	var user models.User
+	if err := c.db.Where("github_user_id = ?", oauthUser.UserID).First(&user).Error; err != nil {
+		// Authenticate user
+		if err := c.auth.Authenticate(ctx, user); err != nil {
 			return err
 		}
 	}
 
-	// Authenticate user
+	// Or create user
+	user = models.User{
+		Email:        oauthUser.Email,
+		FullName:     oauthUser.Name,
+		GitHubUserID: oauthUser.UserID,
+	}
+	if err := c.db.Create(&user).Error; err != nil {
+		return err
+	}
+
 	if err := c.auth.Authenticate(ctx, user); err != nil {
 		return err
 	}
