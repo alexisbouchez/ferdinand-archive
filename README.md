@@ -34,7 +34,6 @@
 - [x] Create and manage domains and their DNS records (MX, SPF, DKIM, DMARC)
 - [x] Create and manage API keys
 - [x] Sending transactional emails through our REST API, or our SMTP server
-- [ ] Support for attachments
 
 ## Documentation
 
