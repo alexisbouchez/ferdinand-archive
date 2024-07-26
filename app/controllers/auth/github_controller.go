@@ -29,11 +29,13 @@ func (c *GitHubOAuthController) Callback(ctx *caesar.Context) error {
 
 	// Find user
 	var user models.User
-	if err := c.db.Where("github_user_id = ?", oauthUser.UserID).First(&user).Error; err != nil {
+	if err := c.db.Where("email = ?", oauthUser.Email).First(&user).Error; err == nil {
 		// Authenticate user
 		if err := c.auth.Authenticate(ctx, user); err != nil {
 			return err
 		}
+
+		return ctx.Redirect(AFTER_AUTH_REDIRECT_TO)
 	}
 
 	// Or create user
@@ -41,6 +43,9 @@ func (c *GitHubOAuthController) Callback(ctx *caesar.Context) error {
 		Email:        oauthUser.Email,
 		FullName:     oauthUser.Name,
 		GitHubUserID: oauthUser.UserID,
+	}
+	if user.FullName == "" {
+		user.FullName = oauthUser.NickName
 	}
 	if err := c.db.Create(&user).Error; err != nil {
 		return err
