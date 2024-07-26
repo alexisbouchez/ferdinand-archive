@@ -1,0 +1,93 @@
+---
+title: Self-hosting
+description: Self-host Ferdinand to have full control over your email sending.
+---
+
+<Warning>
+    Ferdinand is still early, and the self-hosting process should be considered **experimental**. 
+    We are working on improving the self-hosting experience, and we welcome your **feedback**.
+</Warning>
+
+## Prerequisites
+
+Before you start self-hosting Ferdinand, you need to have the following prerequisites:
+- A server running Debian 10 or later
+- A domain name, with A, AAAA and MX records on `mail.<domain>.<tld>` pointing to your server
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [The Go programming language](https://golang.org/doc/install)
+- [The Templ CLI](https://templ.guide/quick-start/installation)
+
+## Installation
+
+1. **Clone the Ferdinand repository on your server:**
+
+```sh
+git clone https://github.com/valyentdev/ferdinand.git
+```
+
+2. **Change directory to the cloned repository:**
+
+```sh
+cd ferdinand
+```
+
+3. **Run the `templ` command to generate the views:**
+
+```sh
+templ generate
+```
+
+4. **Create a `.env` file, by copying the `.env.example` file:**
+
+```sh
+cp .env.example .env
+```
+
+5. **Edit the `.env` file to set the missing environment variables:**
+
+```sh
+vim .env
+```
+
+6. **Copy the `.env` file to `/var/ferdinand.env`**
+
+```sh
+sudo cp .env /var/ferdinand.env
+```
+
+7. **Run the SMTP service:**
+
+Make sure that the 465, 80, and 443 ports are open on your server.
+
+Build the SMTP service binary, and move it to the `/usr/local/bin` directory:
+```sh
+go build -o /usr/local/bin/smtp ./cmd/smtp
+```
+
+Create a systemd service file for the SMTP service:
+```sh
+sudo cp ./zarf/smtp.service /etc/systemd/system/smtp.service
+```
+
+Start the SMTP service:
+```sh
+sudo systemctl start smtp
+```
+
+8. **Edit the Caddyfile, to set your domain name:**
+
+```sh
+vim zarf/Caddyfile
+```
+
+9. **Run the `docker compose` command to start the web-related services:**
+
+```sh
+docker compose -f ./zarf/docker-compose.yml up -d
+```
+
+10. **Access the dashboard at `https://mail.<domain>.<tld>`**
+
+11. **Optional: Create an API key in the dashboard, and use it to send forgot password emails.**
+
+Don't forget to modify the .env file to set the correct values for the environment variables, and to restart the Docker services after making changes to the .env file.

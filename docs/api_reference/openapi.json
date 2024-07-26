@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Software Citadel OpenAPI",
-    "description": "A sample API to Send transactional emails through an SMTP server.",
+    "description": "A sample API to send emails through an SMTP server.",
     "license": {
       "name": "MIT"
     },
