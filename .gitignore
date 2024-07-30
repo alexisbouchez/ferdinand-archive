@@ -22,3 +22,4 @@ database.sqlite
 .DS_Store
 
 vendor
+.ssh
